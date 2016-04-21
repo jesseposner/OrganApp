@@ -1,4 +1,4 @@
-var dispatcher = require('../dispatcher/Dispatcher');
+var dispatcher = require('../dispatcher/dispatcher');
 
 var KeyActions = {
   keyPressed: function (noteName) {

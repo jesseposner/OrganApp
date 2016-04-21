@@ -1,13 +1,13 @@
 var Store = require('flux/utils').Store,
-    dispatcher = require('../dispatcher/Dispatcher.js');
+    dispatcher = require('../dispatcher/dispatcher.js');
 
 var KeyStore = new Store(dispatcher);
 
 var _currentKeys = [];
 
 function addKey (keyName) {
-  _currentKeys.push(keyName);
-  KeyStore.__emitChange();
+  if (_currentKeys.indexOf(keyName) === -1) _currentKeys.push(keyName);
+
 }
 
 function removeKey(keyName) {
@@ -19,14 +19,22 @@ function removeKey(keyName) {
   }
 }
 
+KeyStore.getKeys = function () {
+  return _currentKeys.slice();
+};
+
 KeyStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case "ADD_KEY":
       addKey(payload.noteName);
+      KeyStore.__emitChange();
       break;
 
     case "REMOVE_KEY":
       removeKey(payload.noteName);
+      KeyStore.__emitChange();
       break;
   }
 };
+
+module.exports = KeyStore;
